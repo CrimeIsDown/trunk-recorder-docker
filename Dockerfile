@@ -1,5 +1,5 @@
 
-FROM robotastic/trunk-recorder:latest
+FROM registry.gitlab.com/crimeisdown/trunk-recorder:latest
 
 RUN mkdir -p /app/media
 RUN mkdir -p /app/config

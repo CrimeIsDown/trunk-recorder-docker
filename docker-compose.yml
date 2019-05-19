@@ -1,9 +1,34 @@
 version: '3'
 services:
-  recorder:
+  cpd:
     privileged: true
     build: .
     volumes:
       - ./media:/app/media
       - ./config:/app/config
       - /dev/bus/usb:/dev/bus/usb
+    command: ["./recorder","--config=/app/config/cpd.json"]
+  cfd:
+    privileged: true
+    build: .
+    volumes:
+      - ./media:/app/media
+      - ./config:/app/config
+      - /dev/bus/usb:/dev/bus/usb
+    command: ["./recorder","--config=/app/config/cfd.json"]
+  oemc:
+    privileged: true
+    build: .
+    volumes:
+      - ./media:/app/media
+      - ./config:/app/config
+      - /dev/bus/usb:/dev/bus/usb
+    command: ["./recorder","--config=/app/config/oemc_p25.json"]
+  sc21:
+    privileged: true
+    build: .
+    volumes:
+      - ./media:/app/media
+      - ./config:/app/config
+      - /dev/bus/usb:/dev/bus/usb
+    command: ["./recorder","--config=/app/config/starcom21.json"]
