@@ -2,33 +2,47 @@ version: '3'
 services:
   cpd:
     privileged: true
-    build: .
+    image: registry.gitlab.com/crimeisdown/trunk-recorder:latest
+    environment:
+      ANALOG_AUDIO_SINKS: "hw:1,0,0;hw:1,0,1;hw:1,0,2;hw:1,0,3;hw:1,0,4;hw:1,0,5;hw:1,0,6;hw:1,0,7;hw:2,0,0;hw:2,0,1;hw:2,0,2;hw:2,0,3;hw:2,0,4;hw:2,0,5;hw:2,0,6;hw:2,0,7;hw:3,0,0;hw:3,0,1;hw:3,0,2;hw:3,0,3;hw:3,0,4"
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      - /dev/snd:/dev/snd
     volumes:
       - ./media:/app/media
       - ./config:/app/config
-      - /dev/bus/usb:/dev/bus/usb
-    command: ["./recorder","--config=/app/config/cpd.json"]
+      - ~/.volk:/root/.volk
+    command: ["/app/recorder","--config=/app/config/cpd.json"]
   cfd:
     privileged: true
-    build: .
+    image: registry.gitlab.com/crimeisdown/trunk-recorder:latest
+    environment:
+      DIGITAL_AUDIO_SINKS: "hw:4,0,0;hw:4,0,1;hw:4,0,2;hw:4,0,3;hw:4,0,4;hw:4,0,5;hw:4,0,6"
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      - /dev/snd:/dev/snd
     volumes:
       - ./media:/app/media
       - ./config:/app/config
-      - /dev/bus/usb:/dev/bus/usb
-    command: ["./recorder","--config=/app/config/cfd.json"]
-  oemc:
-    privileged: true
-    build: .
-    volumes:
-      - ./media:/app/media
-      - ./config:/app/config
-      - /dev/bus/usb:/dev/bus/usb
-    command: ["./recorder","--config=/app/config/oemc_p25.json"]
+      - ~/.volk:/root/.volk
+    command: ["/app/recorder","--config=/app/config/cfd.json"]
   sc21:
     privileged: true
-    build: .
+    image: registry.gitlab.com/crimeisdown/trunk-recorder:broadcastify
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
     volumes:
       - ./media:/app/media
       - ./config:/app/config
+      - ~/.volk:/root/.volk
+    command: ["/app/recorder","--config=/app/config/starcom21.json"]
+  oemc:
+    privileged: true
+    image: registry.gitlab.com/crimeisdown/trunk-recorder:latest
+    devices:
       - /dev/bus/usb:/dev/bus/usb
-    command: ["./recorder","--config=/app/config/starcom21.json"]
+    volumes:
+      - ./media:/app/media
+      - ./config:/app/config
+      - ~/.volk:/root/.volk
+    command: ["/app/recorder","--config=/app/config/oemc_p25.json"]
